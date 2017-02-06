@@ -1,0 +1,278 @@
+\documentclass{beamer}
+\usepackage{xltxtra,fontspec,xunicode}
+\usepackage{xeCJK} %should be put at the very begining,else compile error,wiered..
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{graphicx}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+  % or ...
+
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage[latin1]{inputenc}
+% or whatever
+
+\let\sups\relax	%since tipa confilict with fontenc, rlax it here
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{tipa}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+\setCJKmainfont{WenQuanYi Micro Hei Mono}
+\setCJKmonofont{Hei}
+
+\title[如何解决不确定性] % (optional, use only with long paper titles)
+{如何解决不确定性}
+\subtitle{之梅花易数、最大熵解法}
+
+\author[shanhongjie] % (optional, use only with lots of authors)
+{shanhongjie}
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\date[Short Occasion] % (optional)
+{\today}
+
+\subject{不确定性}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=7em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+\section{什么是不确定性}
+
+\subsection{什么是不确定性}
+\begin{frame}{什么是信息}
+  Abstractly, information can be thought of as the resolution of uncertainty.
+\end{frame}
+\begin{frame}{什么是不确定性}
+  Uncertainty is a situation which involves imperfect and/or unknown information.
+\\
+  不确定的几个要素：主体、时间、客体。比如：
+  \begin{itemize}
+    \item 张三对李四昨天吃什么不确定。（张三没有接收到该信息。）
+    \item 张三对自己明天吃什么不确定。（事情未发生。）
+    \item 人类对能否攻克艾滋病不确定。（理论与技术不够。）
+  \end{itemize}
+
+\end{frame}
+
+\subsection{怎么度量不确定性}
+\begin{frame}{信息量}
+  \begin{itemize}
+    \item   假设X是一个离散型随机变量，其取值集合为X，概率分布函数为
+      $\forall x \in \mathbf{X}:p(x)=Pr(X=x)$，
+      我们定义事件$X=x$的信息量为：
+  \begin{equation}
+    I(x)=\log(\frac{1}{p(x)})
+  \end{equation}
+
+    \item 可见，一个事件发生的概率越大，则它所携带的信息量就越小。
+  \end{itemize}
+
+\end{frame}
+\begin{frame}{熵}
+  \begin{itemize}
+    \item 对于一个随机变量X而言，它的所有可能取值的信息量的期望$E[I(x)]$就称为熵。
+  \begin{equation}
+    H(X)=E[I(x)]=\sum_{x \in X} p(x)I(x) 
+    = \sum_{x \in X} p(x)\log(\frac{1}{p(x)})
+  \end{equation}
+
+    \item 熵，量化了不确定性的大小，因此也量化了解决不确定性事件的意义的大小。
+  \end{itemize}
+\end{frame}
+
+\subsection{不确定性的哲学观点}
+\begin{frame}{不确定性的哲学观点}
+  \begin{itemize}
+    \item 决定论。又称拉普拉斯信条,认为每个事件的发生，包括人类的认知、举止、决定和行动都是因为先前的事而有原因地发生。如果从原始宇宙以来，有一连串的事件注定地、从未中断地发生，自由意志则是不可能的。
+    \item 知识论、信念、近似、概率、不确定性、神秘主义
+    \item 不可知论。认为形而上学的一些问题，例如是否有来世、鬼神、天主是否存在等，是不为人知或者根本无法知道的想法或理论。
+    \item 虚无主义，为怀疑主义的极致形式。认为世界、生命（特别是人类）的存在是没有客观意义、目的以及可以理解的真相。
+  \end{itemize}
+\end{frame}
+\begin{frame}{不确定性的近代观点总结}
+  以下理论是不确定性的依据：
+  \begin{itemize}
+    \item 量子理论的不确定性原理
+    \item 对未来预测的计算在本宇宙中进行，将反过来作用于本宇宙，从而影响预测结果
+    \item 混沌理论描述的计算复杂性,存在计算极限
+  \end{itemize}
+\end{frame}
+
+\section{梅花易数}
+\subsection{Hello World} 
+  \begin{frame}{简介}
+    梅花易数，是中国古代占卜法之一。以《易经》为基础，结合五行卜算吉凶。
+  \end{frame}
+  \begin{frame}{占卜步骤}
+    \begin{itemize}
+      \item 确定事件。无事不卜。
+      \item 首先尝试理性的解决。不疑不卜。
+      \item 起卦：筮草起卦，龟壳起卦，铜钱起卦，意念起卦\ldots
+      \item 解卦
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{起卦}
+    \begin{itemize}
+      \item 任选一种方式起卦，得到本卦。不妨记作100010(5)，1为阳，0为阴，括弧里表示发生了爻动。比如硬币起卦，取3枚硬币，每丢一次得到一爻（001->0, 101->1, 000->0(动), \ldots）
+      \item 根据本卦234爻和345爻生成互卦000001
+      \item 根据本卦及爻动生成之卦100000
+      \item 分辨出：体(没有爻动的部分)卦为100，用卦(有爻动的部分)为010
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{解卦}
+    \begin{itemize}
+      \item 根据本卦100010查询易经卦辞、象辞，并根据爻动查询爻辞。
+      \item 根据互卦000001查询易经文本，判断推动事物发展的内部矛盾。
+      \item 根据之卦100000查询易经文本，判断十五发展的最终形态。
+      \item 查询体卦100和用卦010所属五行的相生相克的关系判定吉凶、损耗、进益。体代表本体、本质，用代表客体、应用。
+      \item 综合判断。
+    \end{itemize}
+  \end{frame}
+
+\subsection{评价}
+\begin{frame}{评价}
+  \begin{itemize}
+    \item 无法重复实验。蒙卦卦辞“匪我求童蒙，童蒙求我。初筮告，再三渎，渎则不告。”
+      从体系上拒绝了针对同一事件多次占卜，保护了自身的“自圆其说”。可见是一个封闭的系统。
+    \item 取象类比，不具证明效力，更多是一种归纳法则。
+    \item 缺乏理论依据，量子纠缠及宇宙全息论等等只是暂时提供了一点立锥之地。
+    \item 易经原本的基础上发展了太多的糟粕，增大了“取其精华”的难度。
+    \item 在对事件一无所知而一筹莫展时，占卜比随便选择更容易让人接受。
+    \item 占卜为泡mm必备基本技能。
+    \item 占卜的结果，是一种主观的假设。
+  \end{itemize}
+\end{frame}
+     
+
+\section{最大熵}
+\subsection{Hello World}
+\begin{frame}{简介}
+  \begin{itemize}
+    \item 
+  最大熵模型：我们的预测要满足全部已知的条件，而不能对未知的情况做任何主观假设。即在遇到不确定性时，要保留所有可能性。
+\item
+  为了准确的估计随机变量的状态，我们一般习惯性最大化熵，认为在所有可能的概率模型（分布）的集合中，熵最大的模型是最好的模型。
+  \end{itemize}
+\end{frame}
+\begin{frame}{最大熵建模方法}
+  \begin{itemize}
+    \item 实际问题转换为概率问题
+    \item 熵公式, 作为最大化求解目标
+    \item 已有的知识转换为等式和不等式作为constraints
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{资产组合示例}
+  假设我2016年的7个品种的资产的最大回撤分别为: 0.15,0.24,0.90,0.33,0.25,0.15,0.17， 回报率分别为0.05,0.1,-0.1,0.03,0.05,0.12,0.18。 \\我要求总的最大回撤率不超过0.3， 总的回报率不低于0.2， \\那么我如何构建资产组合呢？
+\end{frame}
+\begin{frame}{资产组合示例}
+  \begin{itemize}
+    \item 资产组合问题转换为每个品种的选中的概率问题。即最终希望得到一组比例：$p_1,p_2,p_3,p_4,p_5,p_6,p_7$
+    \item 熵的公式：
+  \begin{equation}
+    H(X)= \sum_{i=1}^{7} p_i\log(\frac{1}{p_i})
+  \end{equation}
+\item 建立约束条件：
+  \begin{itemize}
+    \item $ 0.15*p_1 + 0.24*p_2 + 0.90*p_3 + 0.33*p_4 + 0.25*p_5 + 0.15*p_6 + 0.17*p_7 < 0.3 $
+    \item $ 0.2< 0.05*p_1 + 0.1*p_2 + -0.1*p_3 + 0.03*p_4 + 0.05*p_5 + 0.12*p_6 + 0.18*p_7 $
+  \end{itemize}
+\item 求解。可利用R/Python的优化包解决。
+
+  \end{itemize}
+\end{frame}
+
+\subsection{评价}
+\begin{frame}{评价}
+  \begin{itemize}
+    \item 模型本身就允许充分利用已有的知识。
+    \item 对未知事物不做任何假设，没有任何偏见。
+    \item 熵是一种期望，因此适合长期反复使用。
+    \item 模型的形式非常简单。
+  \end{itemize}
+\end{frame}
+
+\section{Reference}
+\subsection{Reference}
+\begin{frame}
+  \begin{itemize}
+    \item https://en.wikipedia.org/wiki/Information\_theory
+    \item https://en.wikipedia.org/wiki/Uncertainty
+    \item https://zh.wikipedia.org/wiki/知识论
+    \item http://blog.csdn.net/rtygbwwwerr/article/details/50778098
+    \item 《数学之美》
+    \item 《易经》
+    \item 《卦的体用分析与五行生克》
+  \end{itemize}
+\end{frame}
+
+\end{document}

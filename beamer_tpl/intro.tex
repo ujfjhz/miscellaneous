@@ -1,0 +1,239 @@
+\documentclass{beamer}
+\usepackage{xltxtra,fontspec,xunicode}
+\usepackage{xeCJK} %should be put at the very begining,else compile error,wiered..
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{graphicx}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+  % or ...
+
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage[latin1]{inputenc}
+% or whatever
+
+\let\sups\relax	%since tipa confilict with fontenc, rlax it here
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{tipa}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+\setCJKmainfont{WenQuanYi Micro Hei Mono}
+\setCJKmonofont{Hei}
+
+\title[What You Think Is What You Get] % (optional, use only with long paper titles)
+{Introduction To \TeX}
+
+\author[shanhongjie] % (optional, use only with lots of authors)
+{shanhongjie}
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\date[Short Occasion] % (optional)
+{\today}
+
+\subject{TeX}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=7em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+\section{What is \TeX}
+\subsection{What \TeX is}
+\begin{frame}{What \TeX is}
+  \begin{itemize}
+    \item \TeX{} is a typesetting system.
+    \item Follows the design philosophy of separating presentation from content.
+  \end{itemize}
+\end{frame}
+\begin{frame}{Author}
+\begin{center}
+  \includegraphics{knuthnorris.jpg}
+\end{center}
+\end{frame}
+\begin{frame}{How to pronounce \TeX}
+  \begin{itemize}
+    \item The name \TeX{} is intended by its developer to be \textipa{/"tEx/}, with the final consonant of loch or Bach. 
+    \item The letters of the name are meant to represent the capital Greek letters tau, epsilon, and chi, as \TeX{} is an abbreviation of \textipa{tEXVn} τέχνη , Greek for both ``art'' and ``craft'', which is also the root word of technical. 
+    \item English speakers often pronounce it \textipa{/"tEk/}, like the first syllable of technical.
+  \end{itemize}
+\end{frame}
+\subsection{Why we need \TeX}
+\begin{frame}{Why not Word, PPT?}
+  What You See Is What You Get: So heavy your brain load is!
+\begin{center}
+\begin{tikzpicture}[node distance = 2.5cm, auto]
+    % Place nodes
+\tiny
+    \node [block] (brain) {brain};
+    \node [block, right of=brain] (content) {content};
+    \node [block, above of=content] (apperance) {apperance};
+    \node [block, right of=content] (hand) {hand};
+    \node [block, right of=hand] (word) {word/ppt};
+    \node [decision, below of=hand, node distance = 2cm] (eye) {eye check};
+
+    % Draw edges
+    \path [line] (brain) -- (content);
+    \path [line] (brain) -- (apperance);
+    \path [line] (content) -- (hand);
+    \path [line] (apperance) -- (hand);
+    \path [line] (hand) -- (word);
+    \path [line] (word) -- (eye);
+    \path [line] (eye) -- (brain);
+    \path [line] (eye) -- node  {adjust} (hand);
+\end{tikzpicture}
+\end{center}
+\end{frame}
+\begin{frame}{What You Think Is What You Get}
+\begin{center}
+\begin{tikzpicture}[node distance = 2.5cm, auto]
+    % Place nodes
+\tiny
+    \node [block] (brain) {brain};
+    \node [block, right of=brain] (hand) {hand};
+    \node [block, right of=hand] (word) {pdf};
+
+    % Draw edges
+    \path [line] (brain) -- node {心想} (content);
+    %\path [line] (brain) -- node {think} (content);
+    \path [line] (content) -- (hand);
+    \path [line] (hand) -- node {事成} (word);
+    %\path [line] (hand) -- node {get} (word);
+\end{tikzpicture}
+\end{center}
+\end{frame}
+\begin{frame}{Design for programmer}
+  \begin{itemize}
+    \item Free.
+    \item Developement life cycle.
+    \item Collabration.
+    \item De facto stand for writing academic papers. 
+    \item Focus on content only, not to worry about the appearance.(Since some code dogs are too tulibility.)
+    \item Stability: Bug is Wanted!
+  \end{itemize}
+\end{frame}
+\begin{frame}{\TeX stack}
+\begin{center}
+  \includegraphics[scale=0.4]{tex_stack.png}
+\end{center}
+\end{frame}
+
+\section{How to develope an article}
+\subsection{Developement life cycle}
+\begin{frame}{edit}
+  Just like coding.
+  \begin{itemize}
+    \item editor: vim, emacs, notepad, \ldots
+    \item IDE: TeXShop, texlive\ldots
+  \end{itemize}
+\end{frame}
+\begin{frame}{compile}
+  xelatex <filename.tex>
+
+  Outputs: filename.pdf, filename.log, \ldots
+\end{frame}
+\subsection{Document code structure}
+\begin{frame}{Document code structure}
+  Take article.tex(\LaTeX) as example.
+\end{frame}
+
+\subsection{How to write an article}
+\begin{frame}{How to write an article}
+  \begin{itemize}
+    \item How to write a formula
+    \item  How to write a table
+    \item   How to include a graph
+    \item   How to write a graph
+  \end{itemize}
+\end{frame}
+\begin{frame}{How to apply specific style}
+  Apply specific style: ACM, IEEE, thesis, \ldots
+  \begin{itemize}
+    \item download the style file
+    \item change ``documentclass'' to the specific style simply.
+  \end{itemize}
+  Take ieee.tex(\LaTeX) as example.
+\end{frame}
+
+\section{How to develope slides}
+\subsection{How to develope slides}
+\begin{frame}{Slides code structure}
+  Take intro.tex(\LaTeX) as example.
+\end{frame}
+
+\section{Reference}
+\subsection{Reference}
+\begin{frame}
+  \begin{itemize}
+    \item https://en.wikipedia.org/wiki/TeX
+    \item https://tobi.oetiker.ch/lshort/lshort.pdf
+    \item http://www.ctex.org
+  \end{itemize}
+\end{frame}
+
+\end{document}
