@@ -1,0 +1,549 @@
+\documentclass{beamer}
+\usepackage{xltxtra,fontspec,xunicode}
+\usepackage{xeCJK} %should be put at the very begining,else compile error,wiered..
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+  % or ...
+
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage[latin1]{inputenc}
+% or whatever
+
+\let\sups\relax	%since tipa confilict with fontenc, rlax it here
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{tipa}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+\setCJKmainfont{WenQuanYi Micro Hei Mono}
+\setCJKmonofont{Hei}
+
+\title[Storm] % (optional, use only with long paper titles)
+{Storm}
+\subtitle{Distributed realtime computation}
+
+\author[shanhongjie] % (optional, use only with lots of authors)
+{shanhongjie}
+
+\institute[yihaodian] % (optional, but mostly needed)
+{
+  IT\_Architecture\_SOA\\
+  YHD
+}
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\date[Short Occasion] % (optional)
+{\today}
+
+\subject{Storm}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=7em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+\section{What}
+
+\subsection{History}
+\begin{frame}{Apache bigdata family}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.22]{apache_projects.jpg}
+    %\caption{Apache Storm is a free and open source distributed realtime computation system.}
+  \end{figure}
+\end{frame}
+\begin{frame}{Storm for realtime computation}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{storm-vs-hadoop.png}
+    \caption{batch processing v.s stream processing}
+  \end{figure}
+\end{frame}
+\begin{frame}{Storm history}
+  \begin{itemize}
+    \item Originally created by Nathan Marz and team at BackType.
+    \item Open sourced after being acquired by Twitter.
+    \item Graduate to a top-level project (TLP) on 2014-09-17.
+  \end{itemize}
+\end{frame}
+\begin{frame}{Present status}
+  \begin{itemize}
+    \item Current stable version: v1.1.0. We use v1.0.2.
+    \item Important branches:
+      \begin{itemize}
+	\item master: for v2.0.0 (java-migration, jstorm-merging)
+	\item 1.0.x-branch: for stablizing these releases.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Architecture}
+\begin{frame}{Logical topology}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.22]{storm-flow.png}
+    \caption{A topology is a DAG, the logic for a realtime application.}
+  \end{figure}
+\end{frame}
+\begin{frame}{Logical topology}
+  \begin{itemize}
+    \item Spout, source of streams in a topology\\
+      \begin{itemize}
+	\item Read data from external source(kafka, jumper, database,\ldots)
+	\item Emit streams of tuples into the topology
+      \end{itemize}
+
+    \item Bolt, operators that processing tuple in stream.
+    \item Stream, unbounded sequence of tuples.
+    
+  \end{itemize}
+\end{frame}
+\begin{frame}{Physical topology}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{example-parallelism-topology.png}
+    \caption{Worker processes, executors and tasks make a running topology}
+  \end{figure}
+\end{frame}
+\begin{frame}{Physical topology}
+  \begin{itemize}
+    \item Worker, jvm process, running one or more executors,  occupy a slot(abstraction of <cpu,mem>).
+    \item Executor, thread in jvm, running one or more spout/bolt tasks.
+  \end{itemize}
+\end{frame}
+\begin{frame}{Architecture}
+  \begin{center}
+      \includegraphics[scale=0.45]{storm_arch.jpg}
+  \end{center}
+\end{frame}
+\begin{frame}{Deployment in YHD}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.36]{storm_deploy_yhd.png}
+  \end{figure}
+\end{frame}
+\begin{frame}{Features}
+  \begin{itemize}
+    \item fast \\
+      over 1,000,000 tuples/second per node
+    \item scalable \\
+      easy to extend horizentally
+    \item fault-tolerant\\
+      storm daemons can die safely
+    \item data process guarantee\\
+      \begin{itemize}
+	\item at most once
+	\item at least once
+	\item exactly once
+      \end{itemize}
+    \item easy to learn, code and operate
+    \item \ldots
+  \end{itemize}
+\end{frame}
+
+\subsection{Use case}
+\begin{frame}{Usage in YHD}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{topologies-in-yhd.png}
+    \caption{应用：BI, 精准化，流量分析，风控，反爬虫，等等}
+  \end{figure}
+\end{frame}
+\begin{frame}{Common patterns}
+  \begin{itemize}
+    \item continous computation
+    \item realtime analytics
+    \item online machine learning
+    \item distributed RPC
+    \item ETL
+    \item \ldots
+  \end{itemize}
+\end{frame}
+
+\section{How}
+\subsection{Hello world}
+\begin{frame}{Example: WordCount}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.8]{example-wordcount.png}
+  \end{figure}
+\end{frame}
+\begin{frame}{Design your topology}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{wordcount-topo-design.png}
+  \end{figure}
+\end{frame}
+\begin{frame}{Implement - topology}
+\lstinputlisting[language=Java,basicstyle=\small]{topology.java}
+\end{frame}
+\begin{frame}{Implement - spout}
+\lstinputlisting[language=Java,basicstyle=\small]{spout.java}
+\end{frame}
+\begin{frame}{Implement - bolt}
+\lstinputlisting[language=Java,basicstyle=\small]{bolt.java}
+\end{frame}
+\begin{frame}{Deploy your topology}
+  \begin{itemize}
+    \item packaging\\
+      recommend using maven-shade-plugin to make a fat jar with full dependencies.
+    \item submit\\
+      http://stormui.yihaodian.com
+  \end{itemize}
+\end{frame}
+
+\subsection{Parallelism}
+\begin{frame}{Parallelizing WordCount}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{wordcount-grouping.png}
+  \end{figure}
+\end{frame}
+\begin{frame}{Topology parallelism}
+  \begin{itemize}
+    \item Number of workers(processes)\\
+      method: setNumWorkers()
+    \item Number of executors(threads)\\
+      method: setSpout(),setBold()
+    \item Number of tasks(by default one task per executor)\\
+      method: setNumTasks()
+  \end{itemize}
+\end{frame}
+\begin{frame}{Stream grouping}
+  \begin{itemize}
+    \item Shuffle grouping\\
+      Tuples are randomly distributed across the bolt's tasks.
+    \item Fields grouping\\
+      Tuples are partitioned by the fields specified in the grouping.
+    \item Local or shuffle grouping
+    \item others\\
+      Partial Key grouping, all grouping, global grouping \ldots
+  \end{itemize}
+\end{frame}
+
+\subsection{Guaranteeing message processing}
+\begin{frame}{At most once}
+  \begin{itemize}
+    \item By default, storm guarantee message processed at most once, NO reliability.
+    \item Data loss may happen.
+  \end{itemize}
+\end{frame}
+\begin{frame}{At least once}
+  \begin{itemize}
+    \item User should implement at-least-once using mechanism provided by Storm.
+    \item Data duplication may happen.
+    \item Reference: http://storm.apache.org/releases/1.0.2/Guaranteeing-message-processing.html
+  \end{itemize}
+  
+\end{frame}
+\begin{frame}{At least once - Mechanism}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{acker.png}
+  \end{figure}
+\end{frame}
+\begin{frame}{At least once - Mechanism}
+  Implementing at-least-once by user:
+  \begin{itemize}
+    \item Spout side
+      \begin{itemize}
+	\item generate unique id for every tuple
+	\item implement ack(), to be called when fully processed
+	\item implement fail(), to be called when fail or timeout
+      \end{itemize}
+    \item Bolt side
+      \begin{itemize}
+	\item anchor original tuple
+	\item ack or fail
+      \end{itemize}
+
+  \end{itemize}
+\end{frame}
+\begin{frame}{At least once - Example}
+  \begin{itemize}
+    \item Spout\\
+      \_collector.emit(new Values(``field1'', ``field2'', 3) , msgId);
+    \item Bolt\\
+      \_collector.emit(tuple, new Values(word)); \\
+      \_collector.ack(tuple);
+      (If you use IBasicBolt, anchor and ack are done automatically.)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Exactly once}
+  
+  \begin{itemize}
+    \item Using Storm Trident to archive exactly-once processing.
+    \item Storm Trident is a high-level abstraction on top of Storm core.
+    \item No data loss and no data duplication.
+    \item Reference: http://storm.apache.org/releases/1.0.2/Trident-tutorial.html
+  \end{itemize}
+\end{frame}
+
+\subsection{Tuning}
+\begin{frame}{Visualization - Running status}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\paperwidth,height=0.6\paperheight]{canvas.png}
+    \caption{ad\_behavior\_realtime}
+  \end{figure}
+\end{frame}
+\begin{frame}{Visualization - Running status}
+  \begin{itemize}
+    \item Width of lines between components represents the flow of tuples between components.\\
+      format: <streamid>:<throughput in last 10minute>:<throuhput percentage>
+    \item A blue component represents the Spout in the topology.
+    \item A red component denote a data bottleneck.
+    \item A green component indicate it processing within capacity.
+  \end{itemize}
+\end{frame}
+\begin{frame}{Visualization - History status}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.29]{storm-metric.png}
+    \caption{http://stormui.yihaodian.com/metric}
+  \end{figure}
+\end{frame}
+\begin{frame}{Visualization - Bolt}
+  Metrics for bolts(last 1 minute):
+  \begin{itemize}
+    \item emit-count\\
+      collector.emit() count
+    \item ack-count\\
+      collector.ack() count
+    \item transfer-count\\
+      transfer count
+    \item execute-count\\
+      bolt.execute() count
+    \item execute-latency\\
+      timestamp execute() ends - timestamp execute() begins
+    \item process-latency\\
+      timestamp ack() called - timestamp execute() begins
+  \end{itemize}
+\end{frame}
+\begin{frame}{Visualization - Spout}
+  Metrics for spouts(last 1 minute):
+  \begin{itemize}
+    \item complete-latency\\
+      The average time a tuple tree takes to be completely processed.(0 if no acking)
+    \item ack-count\\
+      The number of tuple trees that completely processed .(0 if no acking)
+    \item fail-count\\
+      The number of tuple trees that explicitly failed or timeout.(0 if no acking)
+    \item emit-count\\
+      collector.emit() count
+    \item transfer-count\\
+      transfer count
+    \item kafkaOffset, kafkaPartition
+  \end{itemize}
+\end{frame}
+\begin{frame}{Visualization - queues}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\paperwidth,height=0.7\paperheight]{storm-queue.png}
+    \caption{Queues(internal message buffers) and executors}
+  \end{figure}
+\end{frame}
+\begin{frame}{Visualization - queues}
+  Metrics of recieve or send queue:
+  \begin{itemize}
+    \item receive/sendqueue
+      \begin{itemize}
+	\item arrival\_rate\_secs\\
+	  tuples arrival rate in last 1 minute
+	\item capacity\\
+	  queue size
+	\item write\_pos\\
+	  write position in queue
+	\item read\_pos\\
+	  read position in queue
+	\item population\\
+	  write\_pos - read\_pos
+	\item sojourn\_time\_ms\\
+	  (wp - rp) / Math.max(arrivalRateInSecs, 0.00001) * 1000.0
+	\item overflow\\
+	  size of overflow buffer
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Tuning summary}
+  \begin{itemize}
+    \item Show visualization in Storm UI to display a visual representation of your topology and find out the data bottleneck.
+    \item Verify that you have found the topology bottleneck by rewriting execute() method to perform no operations. Then optimize it.
+    \item Increase topology.message.timeout.secs(default 30 seconds) for the topology.
+    \item Override topology.max.spout.pending(default 1024 in YHD) for the topology.
+      \begin{itemize}
+	\item Topologies using the storm core API should start with 1024 and slowly decrease the value as necessary.
+	\item Topologies using the Trident API should start with a much lower value, between 1 and 5.
+      \end{itemize}
+    \item Increase the parallelism for the component.
+  \end{itemize}
+\end{frame}
+\begin{frame}{Basic guidelines for configuring parallelism}
+  Consider the following questions:
+  \begin{itemize}
+    \item What are my data source?
+    \item At what rate do these data sources deliver messages?
+    \item What size are the messages?
+    \item What is my slowest data sink?
+  \end{itemize}
+\end{frame}
+\begin{frame}{Best practice}
+  \begin{itemize}
+    \item worker count < mechine count\\
+      Keep unnecessary network transfer to minimum
+    \item 1 Acker per worker(default)
+  \end{itemize}
+\end{frame}
+
+\section{Future}
+\subsection{Storm future}
+\begin{frame}{Storm future}
+  \begin{quote}
+    ``The future is already here, it is just not evenly distributed. -- William Gibson''
+  \end{quote}
+\end{frame}
+
+\begin{frame}{Integration with external systems}
+
+  \begin{itemize}
+    \item     Apache Kafka Integration
+    \item     Apache HBase Integration
+    \item     Apache HDFS Integration
+    \item     Apache Hive Integration
+    \item     JDBC Integration
+    \item     Redis Integration
+    \item     Elasticsearch Integration
+    \item     Mongodb Integration
+  \end{itemize}
+  ref: https://github.com/apache/storm/tree/master/external
+\end{frame}
+
+\begin{frame}{Other external libraries}
+  Layers on top of storm:
+  \begin{itemize}
+    \item flux \\
+      Easily configure and deploy Storm topologies without embedding configuration in your topology code.
+    \item sql \\
+      The Storm SQL integration allows users to run SQL queries over streaming data in Storm. (sql->trident topology)
+  \end{itemize}
+  ref: https://github.com/apache/storm/tree/master/external
+\end{frame}
+
+\begin{frame}{Evolution}
+  实时计算领域的发展过程，也是实时计算项目间军备竞赛过程。Apache Storm, Twitter Heron, Apache Flink等互相学习，共同进化。Storm进化出或进化着如下features:
+  \begin{itemize}
+    \item 
+    \item 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{What's next for Storm}
+  for 2.0 and later,
+  \begin{itemize}
+    \item Clojure to Java
+    \item Apache Beam integration\\
+      for unified API for dealing with bounded/unbounded data(i.e. batch/streaming)
+    \item Enhancements, improvements, \ldots
+  \end{itemize}
+\end{frame}
+
+\subsection{Bring future to YHD}
+
+\begin{frame}{Bring future to YHD}
+  Storm As A Service:
+  \begin{itemize}
+    \item Visualization
+    \item Multi-tenant resource management
+    \item Automate application management
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Reference}
+  \begin{itemize}
+    \item http://storm.apache.org/releases/1.0.2/index.html
+    \item https://github.com/apache/storm
+    \item http://stormui.yihaodian.com/metric
+    \item http://wiki.yihaodian.cn/mediawiki/index.php/Storm测试集群
+    \item http://wiki.yihaodian.cn/mediawiki/index.php/Storm线上集群
+    \item http://wiki.yihaodian.cn/mediawiki/index.php/架构组-流式计算
+  \end{itemize}
+\end{frame}
+
+\subsection{Q \& A}
+\begin{frame}{Q \& A}
+  Thank you!
+\end{frame}
+
+\end{document}

@@ -1,0 +1,9 @@
+#!/usr/bin/python
+ 
+import sys
+ 
+f = open(sys.argv[1], 'r')
+for line in f:
+    sys.stdout.write(line.rstrip('\r\n').rstrip('\n').decode('hex'))
+
+f.close()

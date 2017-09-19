@@ -1,0 +1,302 @@
+\documentclass{beamer}
+\usepackage{xltxtra,fontspec,xunicode}
+\usepackage{xeCJK} %should be put at the very begining,else compile error,wiered..
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{graphicx}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+  % or ...
+
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage[latin1]{inputenc}
+% or whatever
+
+\let\sups\relax	%since tipa confilict with fontenc, rlax it here
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{tipa}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+\setCJKmainfont{WenQuanYi Micro Hei Mono}
+\setCJKmonofont{Hei}
+
+\title[如何用期货优雅的亏钱] % (optional, use only with long paper titles)
+{如何用期货优雅的亏钱}
+
+\author[shanhongjie] % (optional, use only with lots of authors)
+{shanhongjie}
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\date[Short Occasion] % (optional)
+{\today}
+
+\subject{futures}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=7em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+\section{知此知彼百战不胜}
+\subsection{期货市场的产生}
+\begin{frame}{期货的起源}
+  期货交易经历了从现货交易到远期交易，最后到期货交易的复杂演变过程。
+  \begin{itemize}
+    \item 古希腊和古罗马时期: 出现过中央交易场所、大宗易货交易，以及带有期货贸易性质的交易活动。
+    \item 1251年，英国大宪章正式允许外国商人到英国参加季节性交易会。后来，在贸易中出现了对在途货物提前签署文件，进而买卖文件合同的现象。
+    \item 1571年，英国创建了实际上第一家集中的商品市场伦敦皇家交易所。
+    \item 1848年芝加哥期货交易所产生，是最早的商品期货交易所。
+    \item 1876年伦敦金属交易所产生, 是最早的金属期货交易所。
+    \item 20世纪70年代，芝加哥商业交易所推出外汇期货等，是最早推出金融期货的交易所。
+    \item 1990年10月12日中国郑州粮食批发市场经国务院批准，迈出了中国期货市场发展的第一步。
+  \end{itemize}
+\end{frame}
+\begin{frame}{现货}
+  我们每天几乎都在进行着现货交易：买饭，买菜，上京东买买买\ldots
+  \begin{itemize}
+    \item 交易对象：现货交易买卖的直接对象是商品本身，有样品、有实物、看货定价。
+    \item 交易目的：现货交易是一手钱、一手货的交易，马上或一定时期内获得或出让商品的所有权，是满足买卖双方需求的直接手段。
+    \item 交易方式：现货交易一般是一对一谈判签订合同，具体内容由双方商定，签订合同之后不能兑现，就要诉诸于法律。
+    \item 交易场所：现货交易一般不受交易时间、地点、对象的限制，交易灵活方便，随机性强，可以在任何场所与对手交易。
+    \item 结算方式：现货交易是货到款清，无论时间多长，都是一次或数次结清。
+  \end{itemize}
+\end{frame}
+\begin{frame}{远期合约}
+  \begin{itemize}
+    \item 交易对象：商品买卖双方通过协商达成的，是为了满足双方要求特别制定的合约。 
+    \item 交易方式：远期合约的交易价格则是由买卖双方私下协商确定、一对一达成的。 
+    \item 交易场所：远期合约在交易所场外达成，具体时间、地点由交易双方自行商定。
+    \item 结算方式：远期合约签订后，只有到期才能进行交割清算，其间均不能进行结算。 
+  \end{itemize}
+\end{frame}
+\begin{frame}{期货}
+  　期货合约是远期合约的发展产物，是远期合约的标准化。
+  \begin{itemize}
+    \item 交易对象：期货交易买卖的直接对象是期货合约，是买进或卖出多少手或多少张期货合约。
+    \item 交易目的：期货交易的目的一般不是到期获得实物，套期保值者的目的是通过期货交易转移现货市场的价格风险，投资者的目的是为了从期货市场的价格波动中获得风险利润。 
+    \item 交易方式：期货交易是以公开、公平竞争的方式进行交易。一对一谈判交易(或称私下对冲)被视为违法。
+    \item 交易场所：期货交易必须在交易所内依照法规进行公开、集中交易，不能进行场外交易。
+    \item 结算方式：期货交易实行每日无负债结算制度，必须每日结算盈亏，结算价格是按照成交价加权平均来计算的。
+  \end{itemize}
+\end{frame}
+\begin{frame}{期货的分类}
+  \begin{itemize}
+    \item 商品期货
+      \begin{itemize}
+	\item 农产品期货：玉米、大豆、鲜鸡蛋\ldots
+	\item 金属期货：铜、锡、铅、锌、铝、镍、白银\ldots
+	\item 能源期货：原油\ldots
+      \end{itemize}
+    \item 金融期货
+      \begin{itemize}
+	\item 股票价格指数期货
+	\item 外汇期货
+	\item 利率期货
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+\subsection{期货市场结构}
+\begin{frame}{交易所}
+  国内的期货交易所：
+  \begin{itemize}
+    \item  上海期货交易所\\
+      上海国际能源交易中心为其下属子公司。
+    \item  大连商品交易所
+    \item  郑州商品交易所
+    \item  中国金融期货交易所
+  \end{itemize}
+\end{frame}
+\begin{frame}{其他机构}
+  \begin{itemize}
+    \item 经纪机构：是交易者与期货交易所之间的桥梁和纽带，它在期货市场中的作用主要是：接受客户委托，代理期货交易，\ldots \\
+    \item 监管机构：中国证监会期货监管部
+    \item 自律机构： 期货行业协会
+  \end{itemize}
+\end{frame}
+\begin{frame}{期货市场的功能}
+  \begin{itemize}
+    \item 回避价格风险的功能。生产经营者通过在期货市场上进行套期保值业务来回避现货交易中价格波动带来的风险，锁定生产经营成本，实现预期利润。
+    \item 重要的投机、套利工具。
+    \item 发现价格的功能。标准化合约的转让又增加了市场流动性，期货市场中形成的价格反映供求状况，同时又为现货市场提供了参考价格，起到了 ``发现价格''的功能。
+    \item \ldots
+  \end{itemize}
+\end{frame}
+\begin{frame}{参与投资者组成}
+  \begin{itemize}
+    \item 投机者
+    \item 套利者
+    \item 套期保值者
+  \end{itemize}
+\end{frame}
+\begin{frame}{期货行情}
+  \begin{itemize}
+    \item 国内期货，每秒钟至多一个tick，其为500ms的snapshot，没有逐笔成交记录。
+    \item 一般只能获取L1数据，L2数据门槛很高。
+  \end{itemize}
+\end{frame}
+
+\section{用程序化交易来更稳健的亏钱}
+\subsection{整体结构}
+\begin{frame}{整体结构}
+  \begin{center}
+    \includegraphics[scale=0.6]{arch.png}
+  \end{center}
+\end{frame}
+\begin{frame}{平台选择——vnpy}
+  \begin{itemize}
+    \item 社区发展比较有开源范，https://github.com/vnpy/
+    \item 不错的架构设计，既可以当平台来用，也可以用作framework建设自己的平台
+    \item 支持各种接口，不限于期货，支持各种市场的交易
+    \item python语言，可以快速开发，便于策略的研究
+  \end{itemize}
+\end{frame}
+\subsection{交易系统的构建}
+\begin{frame}{交易系统架构}
+  \begin{center}
+    \includegraphics[scale=0.11]{tradearch.png}
+  \end{center}
+\end{frame}
+\begin{frame}{系统目标}
+  在合适的时间，对合适的品种，利用以下4个指令获利：
+  \begin{itemize}
+    \item buy
+    \item sell
+    \item short
+    \item cover
+  \end{itemize}
+  具体来说，我们需要确定获利多少，并审视所承担的风险是否在承受范围内。
+\end{frame}
+
+\begin{frame}{历史数据准备}
+  就像ETL相对KDD来说至关重要一样，历史数据完整性、正确性在程序化交易中需要足够重视。Garbage in, Garbage out。
+\end{frame}
+
+\begin{frame}{策略研究方法}
+  \begin{itemize}
+    \item 根据常见的经典策略启发新策略。
+    \item 根据以往的主观交易经验，归纳策略。
+    \item 根据对市场的看法制定策略。
+    \item 人工智障(AI)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{策略测试}
+  \begin{itemize}
+    \item 样本内测试，以优化参数
+    \item 样本外测试，以检验参数
+    \item 模拟盘测试
+    \item 小规模实盘
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{资金管理}
+  \begin{itemize}
+    \item 资产组合：最大熵理论
+    \item 头寸管理：凯利公式
+      $f=\frac{p(b+1)-1}{b}$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{风险管理}
+  \begin{itemize}
+    \item 合规性管理：开仓规模、开仓频率、撤单频率
+    \item 黑天鹅高发期的规避
+    \item 止损
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{严格执行}
+  以手动干预为耻，严格执行策略。
+\end{frame}
+
+\section{亏钱后如何安慰自己}
+\subsection{亏钱后如何安慰自己}
+\begin{frame}{亏钱后如何安慰自己}
+  \begin{itemize}
+    \item 钱亏光了就可以老老实实上班了。
+    \item 以交易为核心目标，学习人类发明的各种技术、哲学思想一点都不会觉得枯燥。在亏钱后还会多明白什么叫“碌碌无为”。
+    \item 虽然自己是个亏货，但一定有能力识破各种骗术。
+    \item 交易教我们如何选择，亏钱后帮我们选择。
+  \end{itemize}
+\end{frame}
+
+\section{Reference}
+\subsection{Reference}
+\begin{frame}
+  \begin{itemize}
+    \item 《通往财务自由之路》
+    \item 《海龟交易法则》
+    \item 《期货、期权及衍生品》
+    \item 《Trading Systems and Methods》
+    \item http://finance.sina.com.cn/futuremarket/help/1.html
+  \end{itemize}
+\end{frame}
+
+\end{document}
